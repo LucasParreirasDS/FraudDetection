@@ -22,7 +22,7 @@ def build_clf(unit):
     model.add(Dense(unit, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
     
-    model.compile(loss=BinaryCrossentropy(), optimizer='adam', metrics=Recall())
+    model.compile(loss=BinaryCrossentropy(), optimizer=optimizers.Adam(learning_rate=0.001), metrics=Recall())
     
     return model
 
@@ -36,7 +36,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_
 
 n_features = x.shape[1]
 
-param_grid = {'unit': [6, 12, 20]}
+param_grid = {'unit': [16, 25, 32, 40]}
 
 # Escalando os dados
 scaler = StandardScaler()
@@ -49,7 +49,7 @@ x_test_scl = np.expand_dims(x_test, axis=-1)
 # Criando o modelo com KFold e GridSearch
 kfold = StratifiedKFold(n_splits=5, random_state=42, shuffle=True)
 
-clf = KerasClassifier(build_fn=build_clf, epochs=20)
+clf = KerasClassifier(build_fn=build_clf, epochs=30)
 
 grid = GridSearchCV(estimator=clf, param_grid=param_grid, cv=kfold, verbose=3, scoring=make_scorer(recall_score))
 
@@ -80,3 +80,5 @@ sns.heatmap(cmf, cmap='Blues', annot=True, fmt='g')
 plt.xlabel(' P R E V I S T O')
 plt.ylabel('R E A L')
 plt.show()
+
+grid.best_params_

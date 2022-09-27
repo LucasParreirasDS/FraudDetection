@@ -65,7 +65,7 @@ param_grid = { 'C':[1,100],
 
 
 svc = SVC(kernel='rbf', 
-          C=0.1) 
+          C=75)    
 svc.fit(x_train_scl ,y_train)
 print(svc.score(x_test_scl, y_test)) # sigmoid = 0.90733 | rbf = 0.98999
 y_pred = svc.predict(x_test_scl)
